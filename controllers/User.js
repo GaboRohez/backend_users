@@ -65,8 +65,45 @@ function create(request, response){
     }
 }
 
+function uploadImageProfile(request, response){
+
+  var userId = request.params.id;
+
+  if(request.files){
+    var file_path = request.files.image.path;
+    var file_split = file_path.split('\\');
+    var file_name = file_split[2];
+    var ext_split = file_name.split('\.');
+    var file_ext = ext_split[1];
+
+    //if(userId != request.user.sub) return removeFilesOfUploads(response, file_path, 'You do not have permission to update user data.');
+
+    if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'jpeg' || file_ext == 'gif'){
+        User.findByIdAndUpdate(userId, {image: file_name}, {new: true}, (error, userUpdate) => {
+          if(error) return response.status(500).send({ message: 'Request error'});
+
+          if(!userUpdate) return response.status(500).send({ message: 'An error occurred, please try again later.' });
+
+          return response.status(200).send({ code: "00", message: 'Updated profile picture' });
+        });
+    }else{
+      return removeFilesOfUploads(response, file_path, 'Only png, jpg, jpeg and gif images are allowed.');
+    }
+
+  }else{
+    return response.status(200).send({ code: "01", message: 'No images uploaded.' });
+  }
+}
+
+function removeFilesOfUploads(response, file_path, message){
+  fs.unlink(file_path, (err) => {
+      return response.status(200).send({ code: "01", message: message });
+  });
+}
+
 module.exports = {
   home,
   test,
-  create
+  create,
+  uploadImageProfile
 }
