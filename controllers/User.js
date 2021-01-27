@@ -176,6 +176,16 @@ function updateEmail(request, response) {
     });
 }
 
+function deleteUser(req, res) {
+  var userId = req.params.id;
+
+  User.find({ '_id': userId }).remove(err => {
+    if(err) return response.status(500).send({ message: 'An error occurred, please try again later.'});
+
+    return res.status(200).send({ code: "00", message: 'User removed.' });
+  });
+}
+
 module.exports = {
   home,
   test,
@@ -184,5 +194,6 @@ module.exports = {
   getUser,
   getUsers,
   updateName,
-  updateEmail
+  updateEmail,
+  deleteUser
 }
