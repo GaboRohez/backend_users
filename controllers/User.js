@@ -130,9 +130,27 @@ function getUsers(request, response){
         user.password = undefined;
         user.__v = undefined;
       });
-      
+
       return response.status(200).send({ code: "00", message: 'Success', users });
     });
+}
+
+function updateName(request, response) {
+
+  var params = request.body;
+  var userId = request.params.id;
+
+  if(request.body){
+      User.findByIdAndUpdate(userId, {name: params.name, surname: params.surname}, {new: true}, (error, userUpdate) => {
+        if(error) return response.status(500).send({ message: 'Request error'});
+
+        if(!userUpdate) return response.status(500).send({ message: 'An error occurred, please try again later.' });
+
+        return response.status(200).send({ code: "00", message: 'User name updated.' });
+      });
+    }else{
+      return response.status(200).send({ code: "01", message: 'Can&ampt send empty data.' });
+    }
 }
 
 module.exports = {
@@ -141,5 +159,6 @@ module.exports = {
   create,
   uploadImageProfile,
   getUser,
-  getUsers
+  getUsers,
+  updateName
 }
