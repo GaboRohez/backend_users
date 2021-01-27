@@ -153,6 +153,29 @@ function updateName(request, response) {
     }
 }
 
+function updateEmail(request, response) {
+
+  var userId = request.body.id;
+  var email = request.body.email;
+
+  User.find({$or: [
+      {email: email.toLowerCase()}
+    ]}).exec((err, users) => {
+      if(err) return response.status(500).send({ message: 'User request error' });
+      if(users && users.length >= 1){
+        return response.status(200).send({ code: "01", message: 'That email is already registered!.' });
+      }else{
+        User.findByIdAndUpdate(userId, {email: request.params.email}, {new: true}, (error, userUpdate) => {
+          if(error) return response.status(500).send({ message: 'Request error'});
+
+          if(!userUpdate) return response.status(500).send({ message: 'An error occurred, please try again later.' });
+
+          return response.status(200).send({ code: "00", message: 'Email updated.' });
+        });
+      }
+    });
+}
+
 module.exports = {
   home,
   test,
@@ -160,5 +183,6 @@ module.exports = {
   uploadImageProfile,
   getUser,
   getUsers,
-  updateName
+  updateName,
+  updateEmail
 }
