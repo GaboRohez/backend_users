@@ -119,10 +119,27 @@ function getUser(request, response){
   });
 }
 
+function getUsers(request, response){
+
+    User.find((error, users) => {
+      if(error) return response.status(500).send({ message: 'Request error'});
+
+      if(!users) return response.status(200).send({ code: "01", message: 'No registered users.'});
+
+      users.forEach(function(user){
+        user.password = undefined;
+        user.__v = undefined;
+      });
+      
+      return response.status(200).send({ code: "00", message: 'Success', users });
+    });
+}
+
 module.exports = {
   home,
   test,
   create,
   uploadImageProfile,
-  getUser
+  getUser,
+  getUsers
 }
