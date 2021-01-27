@@ -13,5 +13,6 @@ api.get('/test', UserController.test);
 
 api.post('/user', UserController.create);
 api.post('/user/image/:id', md_upload, UserController.uploadImageProfile);
+api.get('/user/:id', UserController.getUser);
 
 module.exports = api;

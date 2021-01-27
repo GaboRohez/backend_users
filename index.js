@@ -6,7 +6,7 @@ var port = 3800;
 
 //  conexión databse
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb+srv://root:bat91939@cluster0.ucwxe.mongodb.net/userstest?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://root:p45w0rd@cluster0.ucwxe.mongodb.net/userstest?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(()=>{
     console.log("La conexión a base de datos se realizo correctamente");
     //  crear servidor

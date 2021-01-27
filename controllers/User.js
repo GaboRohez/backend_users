@@ -101,9 +101,28 @@ function removeFilesOfUploads(response, file_path, message){
   });
 }
 
+function getUser(request, response){
+
+  var userId = request.params.id;
+
+  User.findById(userId, (error, user) =>{
+
+    if(error) return response.status(500).send({ code: "01", message: 'Request error'});
+
+    if(!user) return response.status(404).send({ code: "02", message: 'User not found'});
+
+    if(user) {
+      user.password = undefined;
+      user.__v = undefined;
+      return response.status(200).send({ code: "00", message: 'Success', user });
+    }
+  });
+}
+
 module.exports = {
   home,
   test,
   create,
-  uploadImageProfile
+  uploadImageProfile,
+  getUser
 }
