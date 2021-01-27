@@ -12,6 +12,7 @@ var user_routes = require('./routes/user');
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json({limit: '50mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
+app.use(express.static('uploads'));
 //  cors
 
 //  rutas
